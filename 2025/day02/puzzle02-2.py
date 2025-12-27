@@ -56,21 +56,46 @@ for IdRange in inputList:
 
 
 
-    else:
+    elif rangeHighLen - rangeLowLen == 1:
 
         #sequence building for low sequence start to end of low length
-        for sequenceLen in primeDic[rangeLowLen]:
+        #eliminates sequences of len 1 first
+        if rangeLowLen != 1:
 
-            print()
-            print(f'Sequence length: {sequenceLen}')
-            print(f'Sequence start: {sequenceStart}')
-            print(f'Sequence end: {sequenceEnd}')
-            print()
+            for sequenceLen in primeDic[rangeLowLen]:
+
+                sequenceStart = int(str(rangeLow)[0:sequenceLen])
+                sequenceEnd = int('9' * sequenceLen)
+
+                print()
+                print(f'Sequence length: {sequenceLen}')
+                print(f'Sequence start: {sequenceStart}')
+                print(f'Sequence end: {sequenceEnd}')
+                print()
+
+                for sequence in range(sequenceStart, sequenceEnd + 1):
+
+                    sequenceTemp = int(str(sequence) * int(rangeLowLen/sequenceLen))
+
+                    if rangeLow <= sequenceTemp <= rangeHigh:
+
+                        IdSet.add(sequenceTemp)
+
 
 
         #sequence building for start of high length to end of high sequence
         for sequenceLen in primeDic[rangeHighLen]:
-            pass
+            
+            sequenceStart = int('1' + '0' * (sequenceLen - 1))
+            sequenceEnd = int(str(rangeHigh)[0:sequenceLen])
+
+            for sequence in range(sequenceStart, sequenceEnd + 1):
+
+                sequenceTemp = int(str(sequence) * int(rangeHighLen/sequenceLen))
+
+                if rangeLow <= sequenceTemp <= rangeHigh:
+
+                    IdSet.add(sequenceTemp)
 
 
 
