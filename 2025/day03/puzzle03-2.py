@@ -1,6 +1,18 @@
 import os
 from rich import print
 
+path = '2025\day03\input.txt'
+
+with open(path) as file:
+    input = file.read()
+
+inputList = input.splitlines()
+
+outputLen = 12
+
+
+
+
 def getJoltage(bank, RangeMin, RangeMax):
 
     OutputJoltage = None
@@ -43,14 +55,6 @@ def printBank(bank, RangeMin, RangeMax):
 
 
 
-path = '2025\day03\input.txt'
-
-with open(path) as file:
-    input = file.read()
-
-inputList = input.splitlines()
-
-outputLen = 12
 
 count = 0
 
