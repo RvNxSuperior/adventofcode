@@ -14,3 +14,11 @@ test2 = 2
 test = 'Test'
 
 print(test.count('t'))
+
+row = 1
+column = 1
+
+newRow = inputList[row][:column] + 'X' + inputList[row][column + 1:]
+
+print(inputList[row])
+print(newRow)
