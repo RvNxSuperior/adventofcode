@@ -48,7 +48,7 @@ while deltaLen > 0:
 
     while count < rangeListLenTemp:
         
-        if count < rangeListLenTemp - 1 and rangeList[count][1] > rangeList[count + 1][0]:
+        if count < rangeListLenTemp - 1 and rangeList[count][1] + 1 >= rangeList[count + 1][0]:
 
             if rangeList[count + 1][1] > rangeList[count][1]:
             
@@ -76,44 +76,17 @@ print(f'Original number of ranges: {rangeListLen}')
 print(f'New number of ranges: {len(rangeList)}')
 
 
+# parse new combined ranges and sum up corresponding range lengths
 
+rangeLen = 0
 
-# watch out for following constellation in ranges:
-# number 1 - number 2
-# number 1 - number 3
-# with number 2 > number 3
+for range in rangeList:
 
+    #print(range)
 
+    rangeLenTemp = range[1] - (range[0] - 1)
 
-# parsing ids and ranges
-IdSum = 0
-freshIdList = []
-
-for id in IdList:
-
-    count = 0
-
-    while count < len(rangeList):
-
-        if rangeList[count][0] <= id <= rangeList[count][1]:
-
-            print()
-            print(f'ID: {id}')
-            print(f'Range: {rangeList[count]}')
-
-            freshIdList.append(id)
-
-            IdSum += 1
-
-            count = len(rangeList)
-
-        else:
-
-            count += 1
-
+    rangeLen += rangeLenTemp
 
 print()
-print(f'Sum (additive): {IdSum}')
-print(f'Sum (list): {len(freshIdList)}')
-print()
-print(f'Id amount: {len(IdList)}')
+print(f'Range lengths: {rangeLen}')
