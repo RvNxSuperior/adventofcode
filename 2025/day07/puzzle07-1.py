@@ -61,10 +61,23 @@ for line in inputLines:
 
 # computing beam
 
+SplitterCount = 0
 beamSet = {SPosition}
 
 for line in range(2, len(inputLines), 2):
 
     splitters = findall(inputLines[line], '^')
 
-    print(splitters)
+    for splitter in splitters:
+
+        if splitter in beamSet:
+
+            SplitterCount += 1
+
+            beamSet.add(splitter + 1)
+            beamSet.add(splitter - 1)
+            beamSet.remove(splitter)
+
+print()
+print(f'Splits: {SplitterCount}')
+
