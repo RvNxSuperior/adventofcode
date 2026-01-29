@@ -32,3 +32,13 @@ def findall(string, substring):
 
         
     return output
+
+
+
+
+# ideas: solve problem with depth first search approach
+# necessary: 2 functions:
+# 1. finding the left-most sequence with a given starting sequence
+# 2. finding the deepest splitter which hasn't been turned to a right split previously
+# loop finctions and store corresponding results in a set
+# CAVE: include spaces with no splitters in the solution to not end up with the same path-name for different paths
