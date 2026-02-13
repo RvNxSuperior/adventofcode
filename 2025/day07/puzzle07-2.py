@@ -59,25 +59,51 @@ for line in inputLines:
 
 
 
-# computing beam
+# computing beams layer by layer
+
+BeamDic = {}
+
+for column in range(len(inputLines[0])):
+    BeamDic.update({column:0})
 
 SplitterCount = 0
-BeamDic = {SPosition:1}
+BeamDic.update({SPosition:1})
 
 for line in range(2, len(inputLines), 2):
 
     splitters = findall(inputLines[line], '^')
 
+    BeamList = list(BeamDic.keys())
+
     for splitter in splitters:
 
-        if splitter in BeamDic:
+        if splitter in BeamList:
 
             SplitterCount += 1
 
-            BeamDic.add(splitter + 1)
-            BeamDic.add(splitter - 1)
-            BeamDic.remove(splitter)
+            if splitter-1 in BeamDic:
+                BeamDic[splitter-1] += BeamDic[splitter]
+
+            else:
+                BeamDic.update({splitter-1:BeamDic[splitter]})
+
+            if splitter+1 in BeamDic:
+                BeamDic[splitter+1] += BeamDic[splitter]
+
+            else:
+                BeamDic.update({splitter+1:BeamDic[splitter]})
+
+            BeamDic[splitter] = 0
+
 
 print()
 print(f'Splits: {SplitterCount}')
 
+
+SolutionSum = 0
+
+for value in BeamDic.values():
+    SolutionSum += value
+
+
+print(f'Total path count: {SolutionSum}')
