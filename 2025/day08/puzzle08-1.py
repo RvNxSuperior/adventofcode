@@ -48,7 +48,7 @@ for entry in coordinates:
     if entry[2] > XHigh:
         ZHigh = entry[2]
 
-
+print()
 print(f'Highest X: {XHigh}')
 print(f'Highest Y: {YHigh}')
 print(f'Highest Z: {ZHigh}')
@@ -61,36 +61,82 @@ chunks = {}
 for entry in coordinates:
     # won't work cause it only stores the last list, and not a list of all lists
     # fix asap!!!
-    chunks.update({f'{math.floor(entry[0]/5000)}-{math.floor(entry[1]/5000)}-{math.floor(entry[2]/5000)}':entry})
 
-print(coordinates)
-print()
-print(chunks)
+    chunk = f'{math.floor(entry[0]/5000)}-{math.floor(entry[1]/5000)}-{math.floor(entry[2]/5000)}'
+
+    if chunk in chunks:
+        chunks[chunk].append(entry)
+
+    else:
+        chunks.update({chunk:[entry]})
+
+#print(coordinates)
+#print()
+#print(chunks)
 
 
 
 
-# calculation
+# calculating distances of all combinations
 
-MinDistance = None
+print('Calculating distances for all coordinate combinations')
 
+Distances = {}
+
+
+# currentyl gives the same answer multiple times if two points are to eachother the closest
 for entry1 in coordinates:
 
-    print(f'Type Entry 1: {type(entry1)}')
+    #chunk = [math.floor(entry1[0]/5000), math.floor(entry1[1]/5000), math.floor(entry1[2]/5000)]
 
-    chunk = [math.floor(entry1[0]/5000), math.floor(entry1[1]/5000), math.floor(entry1[2]/5000)]
+    #MinDistance = None
 
-    MinDistance = None
+    for entry2 in coordinates:
 
-    for entry2 in chunks[f'{chunk[0]}-{chunk[1]}-{chunk[2]}']:
+        dist = math.dist(entry1, entry2)
 
-        print(f'Type Entry 2: {type(entry2)}')
+        if dist > 0 and frozenset({str(entry1), str(entry2)}) not in Distances:
 
-        dist = distance(entry1, entry2)
+            Distances.update({frozenset({str(entry1), str(entry2)}):dist})
 
-        # no check for same distance yet!
-        if 0 < dist < MinDistance or MinDistance == None:
 
-            MinDistance = dist
+# iterate through dictionary and check the partner if it's a double entry
+# idea: use frozenset instead of string as key in dictionary to prevent duplicates
+# see: https://stackoverflow.com/questions/59933892/set-as-dictionary-key
 
-    print(f'{entry1 :<12}: {MinDistance}')
+print()
+print(f'Calculated maximum entries: {(len(InputLines))**2 - len(InputLines)}')
+print(f'Number of entries: {len(Distances)}')
+
+
+
+
+
+# ordering coordinate combinations by ascending distance
+
+print('Ordering coordinate combinations by ascending distance')
+
+DistancesSorted = sorted(Distances.items(), key=lambda x:x[1])
+
+
+ConnectionCount = 1000
+
+# getting x shortest connections
+
+for connection in range(ConnectionCount):
+
+    pass
+
+
+CountedCircuits = 3
+
+# multiplying the lengths of the y longest circuits
+
+
+
+## ideas ##
+# first loop through all pairs of coordinates and find all distances
+# then sort by length
+# in a second step go through the first 1000 shortest distances and combine sets of the coordinates
+# maybe later: compute distances wit chunks to ensure not computing all points
+# maybe later 2: compute distances with chunks
