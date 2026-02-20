@@ -18,7 +18,9 @@ coordinates = []
 
 for line in InputLines:
 
-    coordinates.append(line.split(','))
+    split = line.split(',')
+
+    coordinates.append([int(split[0]), int(split[1])])
 
 
 # processing
@@ -31,8 +33,8 @@ for entry1 in coordinates:
 
     for entry2 in coordinates:
 
-        area = (abs(int(entry1[0]) - int(entry2[0])) + 1) * (abs(int(entry1[1]) - int(entry2[1])) + 1)
-
+        area = (abs(entry1[0] - entry2[0]) + 1) * (abs(entry1[1] - entry2[1]) + 1)
+        
         if area > Max:
 
             Max = area
