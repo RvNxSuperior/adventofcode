@@ -14,12 +14,29 @@ coordinates = []
 
 # functions
 
-# is maybe equivalent to math.dist()
+# no use because it is equivalent to math.dist()
 def distance(list1, list2):
 
     dist = round(math.sqrt((list1[0] - list2[0])*2 + (list1[1] - list2[1])*2 + (list1[2] - list2[2])*2))
 
     return dist
+
+
+# find a coordinate string in a list of sets of coordinates
+
+def find_set_in_list(list, coordinate):
+
+    output = False
+
+    for ListIndex in range(len(list)):
+
+        if coordinate in list[ListIndex]:
+
+            output = ListIndex
+
+            break
+        
+    return output
 
 
 
@@ -57,8 +74,12 @@ print()
 
 
 chunks = {}
+Circuits = []
 
 for entry in coordinates:
+
+    # create chunks basen on coordinates and assign the entries
+
     # won't work cause it only stores the last list, and not a list of all lists
     # fix asap!!!
 
@@ -70,9 +91,17 @@ for entry in coordinates:
     else:
         chunks.update({chunk:[entry]})
 
+
+    # creating a list with every point as a set to represent the circuits
+
+    Circuits.append({str(entry)})
+
 #print(coordinates)
 #print()
 #print(chunks)
+#print()
+#print(Circuits)
+
 
 
 
@@ -116,23 +145,59 @@ print(f'Number of entries: {len(Distances)}')
 
 print('Ordering coordinate combinations by ascending distance')
 
-DistancesSorted = sorted(Distances.items(), key=lambda x:x[1])
+DistancesSorted = list(sorted(Distances.items(), key=lambda x:x[1]))
 
 
-ConnectionCount = 1000
 
 # getting x shortest connections
 
-for connection in range(ConnectionCount):
+print('combining sets with the shortest connection')
 
-    pass
+ConnectionCount = 1000
+
+for ConnectionCount in range(ConnectionCount):
+
+    Connection = DistancesSorted[ConnectionCount]
+
+    count = 0
+    for item in Connection[0]:
+        
+        if count == 0:
+            coordinate1 = item
+
+        elif count == 1:
+            coordinate2 = item
+
+        count += 1
+
+    SetIndex1 = find_set_in_list(Circuits, coordinate1)
+    SetIndex2 = find_set_in_list(Circuits, coordinate2)
+
+    if SetIndex1 != SetIndex2:
+
+        Circuits[SetIndex1].update(Circuits[SetIndex2])
+        Circuits.pop(SetIndex2)
+
+
 
 
 CountedCircuits = 3
 
 # multiplying the lengths of the y longest circuits
 
+print('Sorting sets and alculating product of circuits')
 
+Circuits.sort(key=lambda x : len(x), reverse=True)
+
+CircuitProduct = 1
+
+for circuitIndex in range(CountedCircuits):
+
+    CircuitProduct *= len(Circuits[circuitIndex])
+
+
+print()
+print(f'Circuit product: {CircuitProduct}')
 
 ## ideas ##
 # first loop through all pairs of coordinates and find all distances
