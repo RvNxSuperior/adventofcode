@@ -1,7 +1,7 @@
 import os
 import math
 
-path = '2025\day09\input.txt'
+path = '2025/day09/input.txt'
 
 with open(path) as file:
 
@@ -67,12 +67,62 @@ print()
 print('Preprocessing...')
 
 coordinates = []
+MaxX = None
+MinX = None
+MaxY = None
+MinY = None
 
 for line in InputLines:
 
     split = line.split(',')
 
     coordinates.append([int(split[0]), int(split[1])])
+
+    if MaxX == None or int(split[0]) > MaxX:
+        MaxX = int(split[0])
+
+    elif MinX == None or int(split[0]) < MinX:
+        MinX = int(split[0])
+
+    if MaxY == None or int(split[1]) > MaxY:
+        MaxY = int(split[1])
+
+    elif MinY == None or int(split[1]) < MinY:
+        MinY = int(split[1])
+
+print(f'Minimum X: {MinX}')
+print(f'Maximum X: {MaxX}')
+print(f'Minimum Y: {MinY}')
+print(f'Maximum Y: {MaxY}')
+print()
+
+
+# calculating full grid based on coordinates
+
+grid = []
+orientation = 0
+
+# initialize empty grid
+for height in range(MaxY):
+
+    grid.append('.'*MaxX)
+
+
+
+
+for connectionIndex in range(len(coordinates) - 1):
+
+    coordinate1 = coordinates[connectionIndex]
+    coordinate2 = coordinates[connectionIndex + 1]
+
+    if coordinate1[0] == coordinate2[0]:
+        pass
+
+    elif coordinate1[1] == coordinate2[1]:
+        pass
+
+    else:
+        print('Error, unexpected input')
 
 
 
@@ -108,3 +158,12 @@ print()
 # notes: checks any possible rectangle for validity by searching for red tiles (given coordinates)
 # in the rectangle inscribed by the possible rectangle
 # won't work correctly when lines go through the inscribed rectangle without the coordinates being inside it
+
+# idea 1:
+# mostly preprocessing-heavy
+# compute the full grid of red, green and uncoloured tiles from the coordinates
+# then check for uncoloured tiles when checking for validity
+
+# idea 2:
+# mostly processing-heavy
+# precompute all lines between the coordinates and check for red tiles or the lines between them when checking for validity
