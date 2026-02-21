@@ -104,3 +104,7 @@ print(f'Entry 1: {MaxEntry1}')
 print(f'Entry 2: {MaxEntry2}')
 print()
 
+
+# notes: checks any possible rectangle for validity by searching for red tiles (given coordinates)
+# in the rectangle inscribed by the possible rectangle
+# won't work correctly when lines go through the inscribed rectangle without the coordinates being inside it
