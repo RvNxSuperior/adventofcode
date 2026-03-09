@@ -119,7 +119,7 @@ for connectionIndex in range(len(coordinates) - 1):
         pass
 
     elif coordinate1[1] == coordinate2[1]:
-        pass
+        grid[coordinate1[1]] = grid[coordinate1[1]]
 
     else:
         print('Error, unexpected input')
