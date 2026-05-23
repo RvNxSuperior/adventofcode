@@ -1,5 +1,6 @@
 import os
 import math
+from tqdm import tqdm
 
 path = '2025/day09/input.txt'
 
@@ -103,26 +104,91 @@ grid = []
 orientation = 0
 
 # initialize empty grid
-for height in range(MaxY):
+for height in range(MaxY + 1):
 
-    grid.append('.'*MaxX)
-
-
+    grid.append('.' * (MaxX + 1))
 
 
-for connectionIndex in range(len(coordinates) - 1):
+
+
+# first preprocessing integrity check
+
+defaultLength = len(grid[0])
+
+for i in range(len(grid)):
+
+    if defaultLength != len(grid[i]):
+
+        print()
+        print('Error!')
+        print('Unexpected preprocessing 1 values!')
+        print(f'Default: {defaultLength}')
+        print(f'Error: {len(grid[i])}')
+        print()
+
+        break
+
+    if i == len(grid) - 1:
+
+        print('Preprocessing integrity 1 confirmed')
+        print()
+
+
+
+
+
+
+for connectionIndex in range(len(coordinates)):
 
     coordinate1 = coordinates[connectionIndex]
-    coordinate2 = coordinates[connectionIndex + 1]
+    coordinate2 = coordinates[(connectionIndex + 1) % len(coordinates)]
 
     if coordinate1[0] == coordinate2[0]:
         pass
 
     elif coordinate1[1] == coordinate2[1]:
-        grid[coordinate1[1]] = grid[coordinate1[1]]
+
+        if coordinate2[0] > coordinate1[0]:
+
+            grid[coordinate1[1]] = grid[coordinate1[1]][:coordinate1[0] -1 - 1] + '@' + 'X' * (coordinate2[0] - coordinate1[0] - 1) + '@' + grid[coordinate1[1]][coordinate2[0] -1 + 1:]
+
+        elif coordinate2[0] < coordinate1[0]:
+
+            grid[coordinate1[1]] = grid[coordinate1[1]][:coordinate2[0] - 1 - 1] + '@' + 'X' * (coordinate1[0] - coordinate2[0] - 1) + '@' + grid[coordinate1[1]][coordinate1[0] -1 + 1:]
 
     else:
         print('Error, unexpected input')
+
+
+
+
+
+
+
+# second preprocessing integrity test
+
+defaultLength = len(grid[0])
+
+for i in range(len(grid)):
+
+    if defaultLength != len(grid[i]):
+
+        print()
+        print('Error!')
+        print('Unexpected preprocessing 2 values!')
+        print(f'Default: {defaultLength}')
+        print(f'Error: {len(grid[i])}')
+        print()
+
+        break
+
+    if i == len(grid) - 1:
+
+        print('Preprocessing integrity 2 confirmed')
+
+
+
+
 
 
 
@@ -158,6 +224,11 @@ print()
 # notes: checks any possible rectangle for validity by searching for red tiles (given coordinates)
 # in the rectangle inscribed by the possible rectangle
 # won't work correctly when lines go through the inscribed rectangle without the coordinates being inside it
+
+# formatting:
+# red tiles (given by coordinates): @
+# green tiles (connecting and filling): X
+# empty/uncoloured: .
 
 # idea 1:
 # mostly preprocessing-heavy
