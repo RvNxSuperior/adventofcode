@@ -2,7 +2,7 @@ import os
 import math
 from tqdm import tqdm
 
-path = '2025/day09/input.txt'
+path = '2025/day09/test.txt'
 
 with open(path) as file:
 
@@ -62,10 +62,10 @@ def valid(entry1, entry2):
     
 
 
-# preprocessing
+# preprocessing 1
 
 print()
-print('Preprocessing...')
+print('Preprocessing 1...')
 
 coordinates = []
 MaxX = None
@@ -95,7 +95,6 @@ print(f'Minimum X: {MinX}')
 print(f'Maximum X: {MaxX}')
 print(f'Minimum Y: {MinY}')
 print(f'Maximum Y: {MaxY}')
-print()
 
 
 # calculating full grid based on coordinates
@@ -104,14 +103,16 @@ grid = []
 orientation = 0
 
 # initialize empty grid
-for height in range(MaxY + 1):
+for height in range(MaxY + 2):
 
     grid.append('.' * (MaxX + 1))
 
 
+#for line in grid:
+#    print(line)
 
 
-# first preprocessing integrity check
+# preprocessing integrity check 1
 
 defaultLength = len(grid[0])
 
@@ -119,24 +120,21 @@ for i in range(len(grid)):
 
     if defaultLength != len(grid[i]):
 
-        print()
-        print('Error!')
+        print(f'Error! (line {i})')
         print('Unexpected preprocessing 1 values!')
         print(f'Default: {defaultLength}')
         print(f'Error: {len(grid[i])}')
-        print()
 
         break
 
     if i == len(grid) - 1:
 
         print('Preprocessing integrity 1 confirmed')
-        print()
 
 
+# preprocessing 2
 
-
-
+print('Preprocessing 2...')
 
 for connectionIndex in range(len(coordinates)):
 
@@ -144,17 +142,30 @@ for connectionIndex in range(len(coordinates)):
     coordinate2 = coordinates[(connectionIndex + 1) % len(coordinates)]
 
     if coordinate1[0] == coordinate2[0]:
-        pass
+
+        if coordinate2[1] > coordinate1[1]:
+            
+            for line in range(coordinate1[1] + 1, coordinate2[1]):
+
+                grid[line] = grid[line][:coordinate1[0] - 1] + 'X' + grid[line][coordinate1[0] + 1 - 1:]
+
+        elif coordinate2[1] < coordinate1[1]:
+            
+            for line in range(coordinate2[1] + 1, coordinate1[1]):
+
+                grid[line] = grid[line][:coordinate1[0] - 1] + 'X' + grid[line][coordinate1[0] + 1 - 1:]
 
     elif coordinate1[1] == coordinate2[1]:
 
         if coordinate2[0] > coordinate1[0]:
 
-            grid[coordinate1[1]] = grid[coordinate1[1]][:coordinate1[0] -1 - 1] + '@' + 'X' * (coordinate2[0] - coordinate1[0] - 1) + '@' + grid[coordinate1[1]][coordinate2[0] -1 + 1:]
+            grid[coordinate1[1]] = grid[coordinate1[1]][:coordinate1[0] - 1] + '@' + 'X' * (coordinate2[0] - coordinate1[0] - 1) + '@' + grid[coordinate1[1]][coordinate2[0] -1 + 1:]
+
 
         elif coordinate2[0] < coordinate1[0]:
 
-            grid[coordinate1[1]] = grid[coordinate1[1]][:coordinate2[0] - 1 - 1] + '@' + 'X' * (coordinate1[0] - coordinate2[0] - 1) + '@' + grid[coordinate1[1]][coordinate1[0] -1 + 1:]
+            grid[coordinate1[1]] = grid[coordinate1[1]][:coordinate2[0] - 1] + '@' + 'X' * (coordinate1[0] - coordinate2[0] - 1) + '@' + grid[coordinate1[1]][coordinate1[0] -1 + 1:]
+            
 
     else:
         print('Error, unexpected input')
@@ -165,7 +176,7 @@ for connectionIndex in range(len(coordinates)):
 
 
 
-# second preprocessing integrity test
+# preprocessing integrity test 2
 
 defaultLength = len(grid[0])
 
@@ -173,12 +184,10 @@ for i in range(len(grid)):
 
     if defaultLength != len(grid[i]):
 
-        print()
-        print('Error!')
+        print(f'Error! (line {i})')
         print('Unexpected preprocessing 2 values!')
         print(f'Default: {defaultLength}')
         print(f'Error: {len(grid[i])}')
-        print()
 
         break
 
@@ -188,6 +197,62 @@ for i in range(len(grid)):
 
 
 
+# preprocessing 3
+
+print('Preprocessing 3...')
+
+for y in tqdm(range(len(grid))):
+    inside = 0
+    length = 0
+    edgeUp = False
+    edge = False
+
+    for x in range(len(grid[y])):
+
+        if grid[y][x] == 'X':
+
+            if inside == 0:
+
+                inside = 1
+
+            elif edge == True:
+
+                pass
+
+            else:
+
+                inside = 0
+
+                grid[y] = grid[y][:x - length + 1] + 'x' * (length - 1) + grid[y][x:]
+
+        elif grid[y][x] == '@':
+
+            if inside == 1 and edge == False:
+                grid[y] = grid[y][:x - length + 1] + 'x' * (length - 1) + grid[y][x:]
+
+            if edge == True:
+
+                if edgeUp == True and grid[y-1][x] == 'X':
+                    inside = inside ^ 1
+
+                elif edgeUp == False and grid[y+1][x] == 'X':
+                    inside = inside ^ 1
+
+                edge = False
+                length = 0
+
+            elif grid[y][x + 1] == 'X':
+
+                edge = True
+
+                if grid[y + 1][x] != 'X':
+
+                    edgeUp = True
+
+        elif inside == 1:
+            length += 1
+            
+    
 
 
 
@@ -219,6 +284,9 @@ print(f'Biggest possible area: {Max}')
 print(f'Entry 1: {MaxEntry1}')
 print(f'Entry 2: {MaxEntry2}')
 print()
+
+for line in grid:
+    print(line)
 
 
 # notes: checks any possible rectangle for validity by searching for red tiles (given coordinates)
