@@ -32,6 +32,8 @@ for index in range(len(updates)):
 # processing
 
 num = 0
+initCorrect = 0
+initFalse = 0
 
 for update in updates:
     correct = True
@@ -50,5 +52,13 @@ for update in updates:
     if correct == True:
         num += update[int(length/2)]
 
+        initCorrect += 1
+
+    else:
+
+        initFalse += 1
+
 
 print(f'Solution: {num}')
+print(f'Initially correct: {initCorrect}')
+print(f'Initially false: {initFalse}')

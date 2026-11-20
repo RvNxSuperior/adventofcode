@@ -4,6 +4,25 @@ with open(path) as file:
     data = file.read()
 
 
+# functions
+
+def check(update):
+    output = True
+    length = len(update)
+    
+
+    for i in range(1, length):
+        pageNum = update[i]
+        before = update[:i-1]
+        beforeSet = set(before)
+
+        if pageNum in rulesDict:
+            if not beforeSet.isdisjoint(rulesDict[pageNum]):
+                output = i
+
+    return output
+
+
 # preprocessing
 
 DataList = data.split('\n\n')
@@ -31,24 +50,67 @@ for index in range(len(updates)):
 
 # processing
 
-num = 0
+numFalse = 0
+numCorrect = 0
+fails = 0
+initCorrect = 0
+initFalse = 0
+updateCount = 0
+updatesCorrect = []
 
 for update in updates:
-    correct = True
-    length = len(update)
-    
 
-    for i in range(1, length):
-        pageNum = update[i]
-        before = update[:i-1]
-        beforeSet = set(before)
+    updateCount += 1
 
-        if pageNum in rulesDict:
-            if not beforeSet.isdisjoint(rulesDict[pageNum]):
-                correct = False
+    updateTemp = update.copy()
+    output = False
+    count = 0
 
-    if correct == True:
-        num += update[int(length/2)]
+    while output != True:
+
+        count += 1
+        output = check(updateTemp)
 
 
-print(f'Solution: {num}')
+        if output != True:
+
+            outlier = updateTemp[output]
+
+            rule = rulesDict[outlier]
+
+            for i in range(output - 1):
+
+                if updateTemp[i] in rule:
+
+                    updateTemp.insert(i, outlier)
+                    updateTemp.pop(output + 1)
+
+                    break
+
+        elif count > 1:
+            print(check(updateTemp), end=' - ')
+            print(count, end=' - ')
+            print(len(update), end=' - ')
+            print(update, end=' - ')
+            print(updateTemp)
+            
+            numFalse += updateTemp[int(len(updateTemp) / 2)]
+
+            initFalse += 1
+            updatesCorrect.append(updateTemp)
+            
+        else:
+            initCorrect += 1
+            numCorrect += update[int(len(updateTemp) / 2)]
+
+            updatesCorrect.append(update)
+
+
+
+        
+print(f'Solution 1: {numCorrect}')
+print(f'Solution 2: {numFalse}')
+print(f'Initially correct: {initCorrect}')
+print(f'Initially false: {initFalse}')
+print(f'Sum: {initFalse + initCorrect}')
+print(f'Update count: {updateCount}')
