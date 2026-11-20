@@ -1,3 +1,4 @@
 test = {1: 2}
-print(test[1])
 
+if 1 in test:
+    print(1)
