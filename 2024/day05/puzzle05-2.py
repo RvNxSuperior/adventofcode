@@ -7,19 +7,28 @@ with open(path) as file:
 # functions
 
 def check(update):
-    output = True
+    output = False
     length = len(update)
-    
 
     for i in range(1, length):
         pageNum = update[i]
-        before = update[:i-1]
+        before = update[:i]
         beforeSet = set(before)
+
+        print(update, end=' - ')
+        print(i, end=' - ')
+        print(pageNum, end=' - ')
+        print(before)
 
         if pageNum in rulesDict:
             if not beforeSet.isdisjoint(rulesDict[pageNum]):
                 output = i
+                break
 
+    if output == False:
+        output = True
+
+    print(output)
     return output
 
 
@@ -63,28 +72,31 @@ for update in updates:
     updateCount += 1
 
     updateTemp = update.copy()
-    output = False
+    output = 0
     count = 0
 
-    while output != True:
+    while type(output) == type(1):
 
         count += 1
         output = check(updateTemp)
 
 
-        if output != True:
+        if type(output) == type(1):
 
             outlier = updateTemp[output]
 
             rule = rulesDict[outlier]
 
-            for i in range(output - 1):
+            for i in range(output):
 
                 if updateTemp[i] in rule:
 
+                    print(outlier)
                     #insertion sort
                     updateTemp.insert(i, outlier)
                     updateTemp.pop(output + 1)
+
+                    print(updateTemp)
 
                     #bubble sort
                     #updateTemp.insert(i, outlier)
@@ -95,9 +107,8 @@ for update in updates:
                     break
 
         elif count > 1:
+            print(updateCount, end=': ')
             print(check(updateTemp), end=' - ')
-            print(count, end=' - ')
-            print(len(update), end=' - ')
             print(update, end=' - ')
             print(updateTemp)
             
@@ -125,4 +136,9 @@ print(f'Update count: {updateCount}')
 # not: 5360 (bubble-sort)
 # not: 5228 (wrong sorting)
 # not: 5652 (insertion sort)
+# not: 3514 (idk where that came from haha)
 # probably error with the sorting algorithm, review later!
+# ok, reviewed now. Error is definitely in the check-function. Both sorting algorithms produce different sorted lists. Both being verified as valid by the algorithm for some reason. At least one of them being wrong
+# fuck, I found my mistake. For some dumb reason, I did not know that in Python, 1 is equal to True. Therefore my funcion, which returns either True, False or the index, did indeed sometimes return 1
+# holy shit, this is a fucking mess now from all my fucking around. Gotta fix that at some time. Therefore, in this spririt:
+# todo: fix

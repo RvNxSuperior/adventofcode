@@ -1,7 +1,8 @@
-test = [1, 2]
+test = [1, 2, 3, 4, 5]
+test2 = {1: 'a', 2: 'b'}
 
 test2 = test
-test2.pop(1)
+
 
 print(test)
 
@@ -57,19 +58,26 @@ for index in range(len(updates)):
 # processing
 
 num = 0
+count = 0
 
 for update in updates:
+
+    count += 1
 
     sol = check(update)
 
     if sol == True:
         num += update[int(len(update)/2)]
+        print(count)
 
 
 print(f'Solution: {num}')
 
-
-for i in range(10, 1, -1):
+for i in range(1):
     print(i)
 
-    print(len(test))
+if 1 == True:
+    print('Whyyyy')
+
+print(type(True))
+print(type(1))
