@@ -82,8 +82,15 @@ for update in updates:
 
                 if updateTemp[i] in rule:
 
+                    #insertion sort
                     updateTemp.insert(i, outlier)
                     updateTemp.pop(output + 1)
+
+                    #bubble sort
+                    #updateTemp.insert(i, outlier)
+                    #updateTemp.pop(output + 1)
+                    #updateTemp.insert(output + 1, updateTemp[i + 1])
+                    #updateTemp.pop(i + 1)
 
                     break
 
@@ -114,3 +121,8 @@ print(f'Initially correct: {initCorrect}')
 print(f'Initially false: {initFalse}')
 print(f'Sum: {initFalse + initCorrect}')
 print(f'Update count: {updateCount}')
+
+# not: 5360 (bubble-sort)
+# not: 5228 (wrong sorting)
+# not: 5652 (insertion sort)
+# probably error with the sorting algorithm, review later!
