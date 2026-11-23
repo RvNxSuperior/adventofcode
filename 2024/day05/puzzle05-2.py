@@ -15,10 +15,10 @@ def check(update):
         before = update[:i]
         beforeSet = set(before)
 
-        print(update, end=' - ')
-        print(i, end=' - ')
-        print(pageNum, end=' - ')
-        print(before)
+        #print(update, end=' - ')
+        #print(i, end=' - ')
+        #print(pageNum, end=' - ')
+        #print(before)
 
         if pageNum in rulesDict:
             if not beforeSet.isdisjoint(rulesDict[pageNum]):
@@ -26,9 +26,9 @@ def check(update):
                 break
 
     if output == False:
-        output = True
+        output = -1
 
-    print(output)
+    
     return output
 
 
@@ -75,13 +75,13 @@ for update in updates:
     output = 0
     count = 0
 
-    while type(output) == type(1):
+    while output >= 0:
 
         count += 1
         output = check(updateTemp)
 
 
-        if type(output) == type(1):
+        if output > 0:
 
             outlier = updateTemp[output]
 
@@ -91,12 +91,9 @@ for update in updates:
 
                 if updateTemp[i] in rule:
 
-                    print(outlier)
                     #insertion sort
                     updateTemp.insert(i, outlier)
                     updateTemp.pop(output + 1)
-
-                    print(updateTemp)
 
                     #bubble sort
                     #updateTemp.insert(i, outlier)
@@ -107,10 +104,10 @@ for update in updates:
                     break
 
         elif count > 1:
-            print(updateCount, end=': ')
-            print(check(updateTemp), end=' - ')
-            print(update, end=' - ')
-            print(updateTemp)
+            #print(updateCount, end=': ')
+            #print(check(updateTemp), end=' - ')
+            #print(update, end=' - ')
+            #print(updateTemp)
             
             numFalse += updateTemp[int(len(updateTemp) / 2)]
 
